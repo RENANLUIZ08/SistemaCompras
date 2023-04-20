@@ -13,15 +13,15 @@ namespace SistemaCompra.Domain.Test.SolicitacaoCompraAggregate
         {
             //Dado
             var solicitacao = new SolicitacaoCompra("rodrigoasth", "rodrigoasth");
-            var itens = new List<Item>();
             var produto = new Produto("Cedro", "Transversal 3/3", Categoria.Madeira.ToString(), 1001);
-            itens.Add(new Item(produto, 50));
+            solicitacao.AdicionarItem(produto, 50);
+            int condicao = 30;
 
             //Quando
-            solicitacao.RegistrarCompra(itens);
+            solicitacao.RegistrarCompra(condicao);
 
             //Então
-            //Assert.Equal(30, solicitacao.CondicaoPagamento.Valor);
+            Assert.Equal(condicao, solicitacao.CondicaoPagamento.Valor);
         }
 
         [Fact]
@@ -29,10 +29,9 @@ namespace SistemaCompra.Domain.Test.SolicitacaoCompraAggregate
         {
             //Dado
             var solicitacao = new SolicitacaoCompra("rodrigoasth", "rodrigoasth");
-            var itens = new List<Item>();
 
             //Quando 
-            var ex = Assert.Throws<BusinessRuleException>(() => solicitacao.RegistrarCompra(itens));
+            var ex = Assert.Throws<BusinessRuleException>(() => solicitacao.RegistrarCompra());
 
             //Então
             Assert.Equal("A solicitação de compra deve possuir itens!", ex.Message);

@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using SistemaCompra.Application.Produto.Command.AtualizarPreco;
 using SistemaCompra.Application.Produto.Command.RegistrarProduto;
 using SistemaCompra.Application.Produto.Query.ObterProduto;
+using SistemaCompra.Application.SolicitacaoCompra.Command.RegistrarCompra;
 using System;
+using System.Threading.Tasks;
 
 namespace SistemaCompra.API.Produto
 {
@@ -17,11 +19,19 @@ namespace SistemaCompra.API.Produto
         }
 
         [HttpGet, Route("produto/{id}")]
-        public IActionResult Obter(Guid id)
+        public async Task<IActionResult> Obter(Guid id)
         {
-            var query = new ObterProdutoQuery() { Id = id };
-            var produtoViewModel = _mediator.Send(query);
-            return Ok(produtoViewModel);
+            try
+            {
+                var query = new ObterProdutoQuery() { Id = id };
+                var produtoViewModel = await _mediator.Send(query);
+                return Ok(produtoViewModel);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+
         }
 
         [HttpPost, Route("produto/cadastro")]
@@ -29,10 +39,17 @@ namespace SistemaCompra.API.Produto
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult CadastrarProduto([FromBody] RegistrarProdutoCommand registrarProdutoCommand)
+        public async Task<IActionResult> CadastrarProduto([FromBody] RegistrarProdutoCommand registrarProdutoCommand)
         {
-            _mediator.Send(registrarProdutoCommand);
-            return StatusCode(201);
+            try
+            {
+                await _mediator.Send(registrarProdutoCommand);
+                return StatusCode(201);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
 
         [HttpPut, Route("produto/atualiza-preco")]
@@ -40,11 +57,17 @@ namespace SistemaCompra.API.Produto
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-        public IActionResult AtualizarPreco([FromBody] AtualizarPrecoCommand atualizarPrecoCommand)
+        public async Task<IActionResult> AtualizarPreco([FromBody] AtualizarPrecoCommand atualizarPrecoCommand)
         {
-             _mediator.Send(atualizarPrecoCommand);
-            return Ok();
-
+            try
+            {
+                await _mediator.Send(atualizarPrecoCommand);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
     }
 }
