@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using SistemaCompra.Domain.Core;
 using SistemaCompra.Infra.Data.Produto;
+using SistemaCompra.Infra.Data.SolicitacaoCompra;
 using ProdutoAgg = SistemaCompra.Domain.ProdutoAggregate;
 using SolicitacaoAgg = SistemaCompra.Domain.SolicitacaoCompraAggregate;
 
